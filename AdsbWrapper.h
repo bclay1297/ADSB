@@ -1,11 +1,27 @@
-#ifndef ADSBWRAPPER_H
-#define ADSBWRAPPER_H
+//
+// AdsbWrapper.h: ADSB decoding 
+//
+// Copyright (c) 2019 Bruce Clay
+
+// Portions of thei code was adapted from dump1090 and dump978
+// Copyright (c) 2017 Oliver Jowett <oliver@mutability.co.uk>
+
+// This file is free software: you may copy, redistribute and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 2 of the License, or (at your
+// option) any later version.
+//
+// This file is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+//
+
+#ifndef _ADSB_WRAPPER_H_
+#define _ADSB_WRAPPER_H_
 
 #include <qlist.h>
 #include <map>
-
-//#include "adsbwrapper_global.h"
-//class ADSBWRAPPERSHARED_EXPORT AdsbWrapper
 
 #define GDL90_FLAGBYTE 0x7E
 #define GDL90_ESCAPEBYTE 0x7D
@@ -169,38 +185,13 @@ class AdsbWrapper
 		unsigned short crc;
 	};
 
-/*
-	struct trafficReportRec
-	{
-		unsigned alertStatus : 4;
-		unsigned addressType : 4;
-		unsigned char participantAddr[3];
-		unsigned char latFraction[3];
-		unsigned char lonFraction[3];
-		unsigned char altFraction[3];
-		unsigned miscIndicators : 4;
-		unsigned integrityCode : 4;
-		unsigned accuracyCode : 4;
-		unsigned horzVelocity : 12;
-		unsigned vertVelocity : 12;
-		unsigned char trackHeading;
-		unsigned char emitterCategory;  // what size
-		char callsign[8];
-		unsigned char emergencyPriorityCode;  // what size
-		unsigned char spare;  // what size
-		unsigned char crc[2];
-	};
-*/
 	struct trafficReportNumRec
 	{
 		unsigned char alertStatus;
 		unsigned char addressType;
 		unsigned int participantAddr;
-//		unsigned int latFraction;
-//		unsigned int lonFraction;
 		double latitude;
 		double longitude;
-//		unsigned int altFraction;
 		int altitude;
 		unsigned char miscIndicators;
 		unsigned char integrityCode;
@@ -291,9 +282,6 @@ public:
 	int DecodeCallsign(unsigned char *msgBuf, 
 					unsigned char &emitterCategory, std::string &callsign);
 
-	int DecodeModeS0(unsigned char *msgBuf);
-	int DecodeModeS16(unsigned char *msgBuf);
-
 	int DecodePayloadHeader(unsigned char *msgBuf);
 	int DecodeStateVector(unsigned char *msgBuf);
 
@@ -369,11 +357,9 @@ private:
 
 	unsigned short mCrc16Table[256];
 
-//	std::map<int, std::string> mFisbProductNameMap;
-
 	int mLastDataIndex;
 
 	std::string mOwnshipCallsign;
 };
 
-#endif // ADSBWRAPPER_H
+#endif // _ADSB_WRAPPER_H_
